@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: gitops-demo
+  namespace: argocd
+spec:
+  description: GitOps demo project for the Flask sample application.
+  sourceRepos:
+    - https://github.com/rmiravalles/argocd-gitops-demo.git
+  destinations:
+    - namespace: app-gitops-demo
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
