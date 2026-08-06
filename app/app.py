@@ -15,7 +15,7 @@ def load_demo_context() -> dict[str, object]:
 		"environment": getenv("APP_ENVIRONMENT", "development"),
 		"deployment_message": getenv(
 			"DEPLOYMENT_MESSAGE",
-			"GitOps keeps the desired state in Git and ArgoCD reconciles it in the cluster.",
+			"ArgoCD continuously reconciles the running environment with the Git repository, enabling version-controlled, auditable, and declarative deployments.",
 		),
 		"accent_color": getenv("ACCENT_COLOR", "#0f766e"),
 		"cluster_name": getenv("CLUSTER_NAME", "demo-cluster"),
