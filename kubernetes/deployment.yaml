@@ -1,71 +1,69 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-	name: gitops-demo
-	namespace: app-gitops-demo
-	labels:
-		app.kubernetes.io/name: gitops-demo
+  name: gitops-demo
+  namespace: app-gitops-demo
+  labels:
+    app.kubernetes.io/name: gitops-demo
 spec:
-	replicas: 2
-	revisionHistoryLimit: 5
-	selector:
-		matchLabels:
-			app.kubernetes.io/name: gitops-demo
-	template:
-		metadata:
-			labels:
-				app.kubernetes.io/name: gitops-demo
-		spec:
-			containers:
-				- name: web
-					image: ghcr.io/rmiravalles/argocd-gitops-demo:latest
-					imagePullPolicy: IfNotPresent
-					ports:
-						- containerPort: 8080
-							name: http
-					env:
-						- name: PORT
-							value: "8080"
-						- name: APP_NAME
-							value: "GitOps with ArgoCD"
-						- name: APP_VERSION
-							value: "v1.0.0"
-						- name: COMMIT_SHA
-							value: "initial-sync"
-						- name: APP_ENVIRONMENT
-							value: "demo"
-						- name: APP_NAMESPACE
-							value: "app-gitops-demo"
-						- name: APP_IMAGE
-							value: "ghcr.io/rmiravalles/argocd-gitops-demo:latest"
-						- name: ARGOCD_SYNC_STATUS
-							value: "Synced"
-						- name: ARGOCD_HEALTH_STATUS
-							value: "Healthy"
-						- name: DEPLOYMENT_MESSAGE
-							value: "This release is fully defined in Git. Update the manifest, sync ArgoCD, and the UI will show the new state."
-						- name: ACCENT_COLOR
-							value: "#0ea5a4"
-						- name: CLUSTER_NAME
-							value: "demo-cluster"
-						- name: APP_FEATURES
-							value: "manifest-driven release, repeatable syncs, visible rollout changes, Git as source of truth"
-					readinessProbe:
-						httpGet:
-							path: /healthz
-							port: http
-						initialDelaySeconds: 5
-						periodSeconds: 10
-					livenessProbe:
-						httpGet:
-							path: /healthz
-							port: http
-						initialDelaySeconds: 15
-						periodSeconds: 20
-					resources:
-						requests:
-							cpu: 50m
-							memory: 64Mi
-						limits:
-							cpu: 250m
-							memory: 256Mi
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gitops-demo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gitops-demo
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/rmiravalles/argocd-gitops-demo:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: APP_NAME
+              value: "GitOps with ArgoCD"
+            - name: APP_VERSION
+              value: "v1.0.0"
+            - name: COMMIT_SHA
+              value: "initial-sync"
+            - name: APP_ENVIRONMENT
+              value: "demo"
+            - name: APP_NAMESPACE
+              value: "app-gitops-demo"
+            - name: APP_IMAGE
+              value: "ghcr.io/rmiravalles/argocd-gitops-demo:latest"
+            - name: ARGOCD_SYNC_STATUS
+              value: "Synced"
+            - name: ARGOCD_HEALTH_STATUS
+              value: "Healthy"
+            - name: DEPLOYMENT_MESSAGE
+              value: "This release is fully defined in Git. Update the manifest, sync ArgoCD, and the UI will show the new state."
+            - name: ACCENT_COLOR
+              value: "#0ea5a4"
+            - name: CLUSTER_NAME
+              value: "demo-cluster"
+            - name: APP_FEATURES
+              value: "manifest-driven release, repeatable syncs, visible rollout changes, Git as source of truth"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
