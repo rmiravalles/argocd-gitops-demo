@@ -11,6 +11,7 @@ This repository is a small end-to-end demo of GitOps with ArgoCD. It uses a Flas
   - [Traditional deployments](#traditional-deployments)
   - [GitOps deployments](#gitops-deployments)
   - [ArgoCD architecture](#argocd-architecture)
+  - [ArgoCD components](#argocd-components)
   - [Installing ArgoCD](#installing-argocd)
   - [Running the demo](#running-the-demo)
   - [Demonstrations](#demonstrations)
@@ -58,6 +59,18 @@ flowchart LR
 ```
 
 ArgoCD compares the repo with the cluster, reports sync and health status, and applies the desired state when it detects a change or when you request a manual sync.
+
+## ArgoCD components
+
+ArgoCD is made up of a few core services that work together to watch Git, compare desired state, and apply it to the cluster:
+
+- ArgoCD API server: serves the UI, CLI, and API endpoints. It is the main entry point for users and handles authentication, authorization, and sync requests.
+- ArgoCD repository server: fetches Git repositories, renders manifests from tools like Kustomize or Helm, and returns the generated Kubernetes resources to the rest of ArgoCD.
+- ArgoCD application controller: continuously compares the desired state from Git with the live cluster state, detects drift, and performs sync and self-heal actions.
+- ArgoCD dex server: provides optional OpenID Connect authentication integration when external identity providers are enabled.
+- ArgoCD redis: stores transient application state and helps coordinate controller operations.
+
+In this demo, the repository server reads the manifests in `argocd/` and `kubernetes/`, the application controller reconciles those manifests with the cluster, and the API server exposes the status you see in the UI.
 
 ## Installing ArgoCD
 
