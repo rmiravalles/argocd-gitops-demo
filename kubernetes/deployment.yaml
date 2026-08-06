@@ -19,7 +19,7 @@ spec:
       containers:
         - name: web
           image: ghcr.io/rmiravalles/argocd-gitops-demo:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
               name: http

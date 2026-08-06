@@ -86,6 +86,15 @@ After installation, create the `gitops-demo` project and application from the YA
 4. Let ArgoCD sync the `kubernetes/` folder into the target namespace.
 5. Open the ingress host and confirm the UI shows the deployment metadata.
 
+If you want to see changes made to [app/app.py](app/app.py) or [app/templates/index.html](app/templates/index.html) immediately in your browser, run the Flask app locally instead of viewing the cluster through port-forwarding:
+
+```bash
+pip install -r app/requirements.txt
+python app/app.py
+```
+
+Then open `http://localhost:8080` in your browser. The cluster deployment will only reflect those source changes after the container image is rebuilt and pushed, and the manifest points at the updated image.
+
 For local development, you can also run the app directly:
 
 ```bash
