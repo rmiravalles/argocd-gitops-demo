@@ -104,6 +104,35 @@ python app/app.py
 
 The app listens on port `8080` and also exposes `/api/context` and `/healthz`.
 
+## Image Updater Flow
+
+This repo can be wired for Argo CD Image Updater so image changes are written back to Git instead of being applied manually.
+
+The flow is:
+
+1. Build and push a new image from the GitHub Actions workflow.
+2. Argo CD Image Updater watches the Argo CD `Application` named `gitops-demo`.
+3. Image Updater updates [kubernetes/kustomization.yaml](kubernetes/kustomization.yaml) in Git.
+4. Argo CD syncs the changed manifest and rolls out the new pods.
+
+The sample configuration is in [argocd/image-updater.yaml](argocd/image-updater.yaml). It assumes:
+
+- the `argocd-image-updater` controller is installed in the cluster
+- the controller has credentials that can push back to this repository via a GitHub PAT stored in `argocd-image-updater/git-creds`
+- the repo is managed through the `main` branch
+
+If you use this flow, you should keep pushing immutable tags or digests from CI and let Image Updater commit the manifest change for you.
+
+To create the secret for a GitHub PAT, use a token with write access to the repository:
+
+```bash
+kubectl -n argocd-image-updater create secret generic git-creds \
+  --from-literal=username=<github-username> \
+  --from-literal=password=<github-pat>
+```
+
+The `username` field should be your GitHub username, and the `password` field should be the PAT.
+
 ## Demonstrations
 
 The cleanest demo sequence is to change a single manifest field and watch the UI update after ArgoCD syncs.
